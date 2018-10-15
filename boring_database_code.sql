@@ -483,19 +483,19 @@ values
  -- 9. Insert into "spt_result" table.
  insert into "spt_result" ("id", "from_depth","first","penetration_on_first","second","penetration_on_second","third","penetration_on_third","result_id")
  values
-	( 1, 1.15, 2, 15,  3,   15,  3, 15, 1),
-	( 2, 2.15, 3, 15,  3,   15,  4, 15, 1),
-	( 3, 3.15, 3, 15,  4,   15,  5, 15, 1),
-	( 4, 4.15, 3, 15,  3,   15,  4, 15, 1),
-	( 5, 5.15, 2, 15,  3,   15,  3, 15, 1),
-	( 6, 6.15, 3, 15,  3,   15,  4, 15, 1),
-	( 7, 7.15, 2, 15,  3,   15,  3, 15, 1),
-	( 8, 8.15, 3, 15,  3,   15,  4, 15, 1),
-	( 9, 9.15, 3, 15,  3,   15,  4, 15, 1),
-	(10, 10.15, 3, 15,3,    15,   4, 15, 1),
-	(11, 11.15, 3, 15,3,    15,   4, 15, 1),
-	(12, 12.15, 3, 15,3,    15,   4, 15, 1),
-	(13, 13.15, 3, 15,3,    15,   4, 15, 1);
+	( 1, 1.15, 2, 0.1,  3,   0.1,  3, 0.1, 1),
+	( 2, 2.15, 3, 0.1,  3,   0.1,  4, 0.1, 1),
+	( 3, 3.15, 3, 0.1,  4,   0.1,  5, 0.1, 1),
+	( 4, 4.15, 3, 0.1,  3,   0.1,  4, 0.1, 1),
+	( 5, 5.15, 2, 0.1,  3,   0.1,  3, 0.1, 1),
+	( 6, 6.15, 3, 0.1,  3,   0.1,  4, 0.1, 1),
+	( 7, 7.15, 2, 0.1,  3,   0.1,  3, 0.1, 1),
+	( 8, 8.15, 3, 0.1,  3,   0.1,  4, 0.1, 1),
+	( 9, 9.15, 3, 0.1,  3,   0.1,  4, 0.1, 1),
+	(10, 10.15, 3, 0.1,3,    0.1,   4, 0.1, 1),
+	(11, 11.15, 3, 0.1,3,    0.1,   4, 0.1, 1),
+	(12, 12.15, 3, 0.1,3,    0.1,   4, 0.1, 1),
+	(13, 13.15, 3, 0.1,3,    0.1,   4, 0.1, 1);
 	
 	
 --10. Insert into "soil_result" table.
@@ -604,10 +604,25 @@ WHERE soil.result_id IN (SELECT rt.id
  		ON boring.construction_id = ct.id 
   		INNER JOIN result rt
  	 	ON rt.boring_test_id = boring.id
-	WHERE ct.name = '安楽亭')
+	WHERE ct.name = '安楽亭');
  -------------------------------------------------------------------------
  -------------------------------------------------------------------------
- 
+SELECT 
+	spt.id ,
+	test.name,
+	rs.started_day "実装日",
+	rs.finished_day "完了日",
+	from_depth as "深さから", 
+	(from_depth + penetration_on_first+ penetration_on_second+ penetration_on_third)as "深さまで",
+	first "一番目の10cmの打撃回数", penetration_on_first "一番目の10cm貫入量", second "二番目の10cmの打撃回数",
+	penetration_on_second "二番目の10cm貫入量",
+	third "三番目の10cmの打撃回数",
+	penetration_on_third "三番目の10cm貫入量"
+from result rs  
+	INNER JOIN spt_result spt
+    ON spt.result_id = rs.id
+	INNER JOIN boring_test test
+    ON test.id = rs.boring_test_id;
  
  
  
